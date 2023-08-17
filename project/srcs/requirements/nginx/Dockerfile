@@ -5,11 +5,16 @@ FROM	alpine:3.18
 
 # Demander au gestionnaire de fichiers apk de mettre à jour sa liste de dépôts --> apk update 
 # Mettre à jour les paquets obsolètes dans notre environnement --> apk upgrade 
-# Installer nginx sans mettre les sources en cache --> apk add --no-cache nginx
-RUN	apk update && apk upgrade && apk add --no-cache nginx
+# Installer nginx et Docker Dumb-Init sans mettre les sources en cache --> apk add --no-cache nginx
+RUN	apk update && apk upgrade && apk add --no-cache nginx dumb-init \
+	&& chmod +x /usr/bin/dumb-init
 
 # Définir le port d'écoute par défaut
 EXPOSE	443
 
+# Définir dumb-init comme point d'entrée
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
 # Éxecuter la configuration installé
 CMD	["nginx", "-g", "daemon off;"]
+

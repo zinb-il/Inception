@@ -1,11 +1,13 @@
 version: "3"
 
 services:
+  ## Create service For Nginix
   nginx:
+    image: nginx
+    comtainer_name: nginx
     build:
       context: .
       dockerfile: requirements/nginx/Dockerfile
-    container_name: nginx
 #      depends_on:
 #        -wordpress
     ports:
@@ -14,4 +16,19 @@ services:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
       - ./requirements/nginx/tools:/etc/nginx/ssl/
       - /home/${USER}/test/public/html:/var/www/
+    restart: always
+  ## Create a service for Mariadb
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    build:
+      context: .
+      dockerfile: requirements/mariadb/Dockerfile
+    ports:
+      - "3306:3306"
+    args:
+      MYSQL_NAME: ${MYSQL_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: always
