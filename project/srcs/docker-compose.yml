@@ -2,21 +2,21 @@ version: "3"
 
 services:
   ## Create service For Nginix
-#   nginx:
-#     image: nginx
-#     container_name: nginx
-#     build:
-#       context: .
-#       dockerfile: requirements/nginx/Dockerfile
-# #      depends_on:
-# #        -wordpress
-#     ports:
-#       - "443:443"
-#     volumes:
-#       - ./requirements/nginx/conf/:/etc/nginx/http.d/
-#       - ./requirements/nginx/tools:/etc/nginx/ssl/
-#       - /home/${USER}/test/public/html:/var/www/
-#     restart: always
+  nginx:
+    image: nginx
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: requirements/nginx/Dockerfile
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      - ./requirements/nginx/tools:/etc/nginx/ssl/
+      - wp_data:/var/www
+    restart: always
   ## Create a service for Mariadb
   mariadb:
     image: mariadb
@@ -31,10 +31,33 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: always
+  ## Create a service for wordpress
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    build:
+      context: .
+      dockerfile: requirements/wordpress/Dockerfile
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    volumes:
+      - wp_data:/var/www
+## Volumes to use inside containers 
 volumes:
   db_data:
     driver_opts:
       type: "none"
       o: "bind"
       device: "~/data/db_data"
+  wp_data:
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "~/data/wp_data"
+## Networks to communicate with containers
+networks:
+  web:
+    driver: bridge
 
