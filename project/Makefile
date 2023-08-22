@@ -1,41 +1,40 @@
 NAME=inception
 
-TARGET=srcs/docker-compose.yml
+SRCS=srcs/docker-compose.yml
 
-all: up
-
-up: local
-	docker-compose -p ${NAME} -f ${TARGET} up -d
-
-down:
-	docker-compose -p ${NAME} -f ${TARGET} down
-	docker system prune -a
-
-fdown:
-	docker-compose -p ${NAME} -f ${TARGET} down --rmi all --volumes
-	docker system prune -a
+$(NAME): create_data
+	docker-compose -p $(NAME) -f $(SRCS) up -d --build
+	sudo apt install -y filezilla
 
 start:
-	docker-compose -p ${NAME} -f ${TARGET} start
+	docker-compose -p $(NAME) -f $(SRCS) start
 
 stop:
-	docker-compose -p ${NAME} -f ${TARGET} stop
-
-build:
-	docker-compose -p ${NAME} -f ${TARGET} up --build -d --no-cache
+	docker-compose -p $(NAME) -f $(SRCS) stop
 
 logs:
-	docker-compose -p ${NAME} -f ${TARGET} logs
+	docker-compose -p $(NAME) -f $(SRCS) logs
 
-clear_local:
-	sudo rm -rf ~/data
+all: $(NAME)
 
-local: ~/data/wp_data ~/data/db_data
+update: clear_data create_data 
+	docker-compose -p $(NAME) -f $(SRCS) up -d 
 
-~/data/wp_data:
-	mkdir -p ~/data/wp_data
+clean:  clear_data
+	docker-compose -p $(NAME) -f $(SRCS) down --rmi all -v
 
-~/data/db_data:
-	mkdir -p ~/data/db_data
 
-.PHONY: all up down fdown start stop build fbuild local clear_local
+fclean:  clear_data
+	docker-compose -p $(NAME) -f $(SRCS) down --rmi all -v
+	docker network prune -f
+	docker system prune -a
+
+clear_data:
+	sudo rm -rf ~/data/*
+
+create_data:
+	mkdir -p ~/data/wp_data && mkdir -p ~/data/db_data
+
+re:	fclean all
+
+.PHONY: all up clean fclean re start stop  logs clear_data create_data

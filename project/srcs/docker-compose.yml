@@ -52,6 +52,68 @@ services:
       - web
     volumes:
       - wp_data:/var/www
+  ## Create a service for redis
+  redis:
+    image: redis
+    container_name: redis
+    build:
+      context: .
+      dockerfile: requirements/redis/Dockerfile
+    depends_on:
+      - wordpress
+    ports:
+      - "6379:6379"
+    networks:
+      - web
+    env_file:
+      - .env
+    restart: always
+  ## Create a service for vsftpd
+  ftp:
+    image: ftp
+    container_name: ftp
+    build:
+      context: .
+      dockerfile: requirements/ftp/Dockerfile
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    networks:
+      - web
+    ports:
+      - "21:21"
+    volumes:
+      - wp_data:/var/www
+    restart: always
+  ## Create service for Static web site
+  simple-site:
+    image: simple-site
+    container_name: simple-site
+    build:
+      context: .
+      dockerfile: requirements/site-statique/Dockerfile
+    ports:
+      - "444:444"
+    volumes:
+      - ./requirements/site-statique/conf/:/etc/nginx/http.d/
+      - /home/${USER}/project/srcs/requirements/site-statique/tools/srcs:/var/www
+    restart: always
+  ## Create service for Adminer
+  adminer:
+    image: adminer
+    container_name: adminer
+    build:
+      context: .
+      dockerfile: requirements/adminer/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - web
+    restart: always
+
 ## Volumes to use inside containers 
 volumes:
   db_data:

@@ -1,13 +1,15 @@
 # Ce fichier Dockerfile est destiné à la création d'une image pour un conteneur wordpress
 
 
-# Utilisation de l'image de base "alpine" avec la version "3.16"
+# Utilisation de l'image de base "alpine" avec la version "3.15"
 FROM	alpine:3.15
 
 # Demander au gestionnaire de fichiers apk de mettre à jour sa liste de dépôts --> apk update
 # Installer php7 et tous ces outils nécessaires, worDocker Dumb-Init sans mettre 
 # les sources en cache --> apk add --no-cache ngi
 # Mettre à jour les paquets obsolètes dans notre environnement --> apk upgrade
+# Configurer le facst_cgi pour l'écoute du port 9000 "sed -i ......"
+# Vider le cache et créer un répertoire /var/run/php
 RUN	apk update && apk upgrade && apk add --no-cache \
 	dumb-init curl mariadb-client redis \
 	php8 php8-phar php8-json php8-curl php8-fpm php8-mysqli php8-iconv\
@@ -20,15 +22,17 @@ RUN	apk update && apk upgrade && apk add --no-cache \
 
 
 
+# Copier le fichier de configuration et d'installation du
+# Wordpress dans les répertoire du conteneur
 COPY	./requirements/wordpress/conf/wp-config.sh .
-#RUN	sh wp-config.sh && rm wp-config.sh && chmod -R 0777 wp-content/
+
+# Définir dumb-init comme point d'entrée
 EXPOSE	9000
 
 # Spécifier le répertoire /var/lib/mysql du conteneur comme volume,
 # afin de monter des données externes dans le conteneur, ce qui est
 # courament utilisé pour conserver les données de le base de données lors
 # des démarrages des conteneurs
-
 VOLUME	["/var/www"]
 
 # Définir dumb-init comme point d'entrée
