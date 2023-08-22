@@ -1,6 +1,0 @@
-#!/bin/bash
-if [ ! -d "/home/${USER}/data" ]; then
-        mkdir ~/data
-        mkdir ~/data/db_data
-        mkdir ~/data/wp_data
-fi

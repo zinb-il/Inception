@@ -1,5 +1,8 @@
-# Utilisation de l'image de base "alpine" avec la version "3.18"
-FROM	alpine:3.18
+# Ce fichier Dockerfile est destiné à la création d'une image pour un conteneur mariadb
+
+
+# Utilisation de l'image de base "alpine" avec la version "3.15"
+FROM	alpine:3.15
 
 # Demander au gestionnaire de fichiers apk de mettre à jour sa liste de dépôts --> apk update
 # Mettre à jour les paquets obsolètes dans notre environnement --> apk upgrade
