@@ -12,13 +12,11 @@ FROM	alpine:3.15
 # Installer VsFtpd et  Dumb-Init sans mettre 
 # les sources en cache --> apk add --no-cache
 RUN	apk update && apk upgrade && apk add --no-cache curl less mariadb-client \
-    	php8 php8-common php8-session php8-iconv php8-gd php8-curl php8-xml php8-mysqli \
-    	php8-imap php8-cgi php8-pdo php8-pdo_mysql php8-soap php8-posix php8-gettext \
-    	php8-ldap php8-ctype php8-dom php8-simplexml wget dumb-init \
+    	php8 php8-phar php8-json php8-curl php8-fpm php8-mysqli php8-iconv wget dumb-init \
     	&& chmod +x /usr/bin/dumb-init \
-	#&& sed -i "s|listen = 127.0.0.1:8080|listen = 0.0.0.0:8080|g" /etc/php8/php-fpm.d/www.conf \
-	#&& sed -i "s|;listen.owner = nobody|listen.owner = nobody|g" /etc/php8/php-fpm.d/www.conf \
-	#&& sed -i "s|;listen.group = nobody|listen.group = nobody|g" /etc/php8/php-fpm.d/www.conf \
+	&& sed -i "s|listen = 127.0.0.1:9000|listen = 0.0.0.0:8080|g" /etc/php8/php-fpm.d/www.conf \
+	&& sed -i "s|;listen.owner = nobody|listen.owner = nobody|g" /etc/php8/php-fpm.d/www.conf \
+	&& sed -i "s|;listen.group = nobody|listen.group = nobody|g" /etc/php8/php-fpm.d/www.conf \
 	&& mkdir -p /var/run/php
 
 

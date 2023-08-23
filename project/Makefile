@@ -21,11 +21,12 @@ update: clear_data create_data
 	docker-compose -p $(NAME) -f $(SRCS) up -d 
 
 clean:  clear_data
-	docker-compose -p $(NAME) -f $(SRCS) down --rmi all -v
+	docker-compose -p $(NAME) -f $(SRCS) down -v
+	docker rmi $(docker images -q)
 
 
 fclean:  clear_data
-	docker-compose -p $(NAME) -f $(SRCS) down --rmi all -v
+	docker-compose -p $(NAME) -f $(SRCS) down -v --rmi all
 	docker network prune -f
 	docker system prune -a
 

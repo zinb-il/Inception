@@ -113,6 +113,23 @@ services:
     networks:
       - web
     restart: always
+  ## Create service for cAdvisor
+  cadvisor:
+    image: cadvisor
+    container_name: cadvisor
+    build:
+      context: .
+      dockerfile: ./requirements/bonus/cadvisor/.
+    ports:
+      - "5000:5000"
+    networks:
+      - web
+    # volumes:
+    #   - /:/rootfs:ro
+    #   - /var/run:/var/run:ro
+    #   - /sys:/sys:ro
+    #   - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
 
 ## Volumes to use inside containers 
 volumes:
@@ -130,6 +147,4 @@ volumes:
 networks:
   web:
     driver: bridge
-
-
 
