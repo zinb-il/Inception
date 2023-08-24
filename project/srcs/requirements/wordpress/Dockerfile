@@ -12,7 +12,8 @@ FROM	alpine:3.15
 # Vider le cache et créer un répertoire /var/run/php
 RUN	apk update && apk upgrade && apk add --no-cache \
 	dumb-init curl mariadb-client redis \
-	php8 php8-phar php8-json php8-curl php8-fpm php8-mysqli php8-iconv\
+	php8 php8-phar php8-json php8-curl php8-fpm php8-mysqli \
+	php8-tokenizer php8-iconv php8-redis\
 	wget unzip \
 	&& chmod +x /usr/bin/dumb-init \
 	&& sed -i "s|listen = 127.0.0.1:9000|listen = 0.0.0.0:9000|g" /etc/php8/php-fpm.d/www.conf \

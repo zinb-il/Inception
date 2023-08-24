@@ -119,16 +119,18 @@ services:
     container_name: cadvisor
     build:
       context: .
-      dockerfile: ./requirements/bonus/cadvisor/.
+      dockerfile: ./requirements/cadvisor/Dockerfile
     ports:
       - "5000:5000"
     networks:
       - web
-    # volumes:
-    #   - /:/rootfs:ro
-    #   - /var/run:/var/run:ro
-    #   - /sys:/sys:ro
-    #   - /var/lib/docker/:/var/lib/docker:ro
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
     restart: always
 
 ## Volumes to use inside containers 

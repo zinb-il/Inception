@@ -17,12 +17,14 @@ logs:
 
 all: $(NAME)
 
-update: clear_data create_data 
+update:
 	docker-compose -p $(NAME) -f $(SRCS) up -d 
+
+down:	
+	docker-compose -p $(NAME) -f $(SRCS) down
 
 clean:  clear_data
 	docker-compose -p $(NAME) -f $(SRCS) down -v
-	docker rmi $(docker images -q)
 
 
 fclean:  clear_data

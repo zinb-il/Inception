@@ -21,7 +21,7 @@ COPY requirements/ftp/tools/vsftpd-script.sh /
 EXPOSE	21
 
 # Définir le répertoire de travail
-WORKDIR ["/var/www"]
+WORKDIR "/var/www"
 
 # Définir dumb-init comme point d'entrée
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]

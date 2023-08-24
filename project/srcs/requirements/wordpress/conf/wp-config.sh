@@ -13,7 +13,6 @@ until mysql --host=mariadb --user=$MYSQL_USER --password=$MYSQL_PASSWORD -e '\c'
 done
 
 
-rm wp-config.sh
 cd /var/www/
 
 
