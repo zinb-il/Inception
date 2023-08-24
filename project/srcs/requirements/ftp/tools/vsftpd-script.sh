@@ -3,7 +3,7 @@
 echo "Début de construction de VsFtpd"
 
 # Créer un utilisateur pour se connecter au serveur, et l'ajouter dans 
-# le groupe sudo, pour qu'il puisse fodifer les fichier
+# le groupe sudo, pour qu'il puisse modifer les fichier
     adduser -h /var/www -s /bin/false -D ${FTP_USER} && \
     echo "${FTP_USER}:${FTP_PASSWORD}" | /usr/sbin/chpasswd && \
     adduser ${FTP_USER} root
